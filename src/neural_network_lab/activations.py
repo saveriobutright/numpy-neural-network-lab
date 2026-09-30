@@ -27,3 +27,23 @@ def sigmoid_derivative(x):
     s = sigmoid(x)
     result = s * (1 - s)
     return result
+
+
+def relu(x):
+    """
+    Apply the ReLU activation function element-wise.
+
+    Negative values become zero, while positive values remain unchanged.
+    """
+    x = np.asarray(x, dtype=float)
+    return np.maximum(x, 0.0)
+
+
+def relu_derivative(x):
+    """
+    Compute the ReLU derivative element-wise.
+
+    The derivative at zero is defined as zero.
+    """
+    x = np.asarray(x, dtype=float)
+    return (x > 0).astype(float)

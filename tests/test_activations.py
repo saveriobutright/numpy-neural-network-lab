@@ -1,6 +1,6 @@
 import numpy as np
 
-from neural_network_lab.activations import sigmoid, sigmoid_derivative
+from neural_network_lab.activations import sigmoid, sigmoid_derivative, relu, relu_derivative
 
 
 def test_sigmoid_of_zero_is_half():
@@ -31,3 +31,15 @@ def test_sigmoid_derivative_is_symmetric():
     s = sigmoid_derivative(input_array)
     t = sigmoid_derivative(-input_array)
     np.testing.assert_allclose(s, t, rtol=1e-7)
+
+
+def test_relu_is_applied_element_wise():
+    input_array = np.array([-3.0, -0.5, 0.0, 2.0, 5.0])
+    result = relu(input_array)
+    np.testing.assert_allclose(result, [0.0, 0.0, 0.0, 2.0, 5.0])
+
+
+def test_relu_derivative_uses_zero_at_origin():
+    input_array = np.array([-3.0, -0.5, 0.0, 2.0, 5.0])
+    result = relu_derivative(input_array)
+    np.testing.assert_allclose(result, [0.0, 0.0, 0.0, 1.0, 1.0])
