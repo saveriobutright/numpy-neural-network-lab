@@ -23,8 +23,9 @@ implementation.
 - Sigmoid derivative for backpropagation.
 - ReLU activation with an explicit derivative convention at zero.
 - Vectorized operations for scalar, list, and NumPy array inputs.
-- Automated tests for expected values, numerical stability, and mathematical
-  properties.
+- Automated tests for expected values, numerical stability, mathematical
+  properties, and probability normalization.
+- Numerically stable Softmax activation for individual vectors and batches.
 
 ## Project Structure
 
@@ -80,6 +81,7 @@ from neural_network_lab import (
     relu_derivative,
     sigmoid,
     sigmoid_derivative,
+    softmax,
 )
 
 values = np.array([-2.0, 0.0, 2.0])
@@ -88,13 +90,14 @@ print(sigmoid(values))
 print(sigmoid_derivative(values))
 print(relu(values))
 print(relu_derivative(values))
+print(softmax(values))
 ```
 
 ## Roadmap
 
 - [x] Stable sigmoid activation and derivative
 - [x] ReLU activation and derivative
-- [ ] Softmax activation
+- [x] Numerically stable Softmax activation with batch support
 - [ ] Loss functions
 - [ ] Dense layers and parameter initialization
 - [ ] Vectorized backpropagation

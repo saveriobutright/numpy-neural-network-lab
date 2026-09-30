@@ -47,3 +47,14 @@ def relu_derivative(x):
     """
     x = np.asarray(x, dtype=float)
     return (x > 0).astype(float)
+
+
+def softmax(x, axis=-1):
+    """
+    Apply Softmax along an axis using numerically stable normalization.
+    """
+    x = np.asarray(x, dtype=float)
+    shifted_values = x - np.max(x, axis=axis, keepdims=True)
+    exp_values = np.exp(shifted_values)
+    exp_sum = np.sum(exp_values, axis=axis, keepdims=True)
+    return exp_values / exp_sum

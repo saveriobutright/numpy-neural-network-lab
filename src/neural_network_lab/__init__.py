@@ -1,3 +1,15 @@
-from .activations import sigmoid, sigmoid_derivative, relu, relu_derivative
+from .activations import (
+    relu,
+    relu_derivative,
+    sigmoid,
+    sigmoid_derivative,
+    softmax,
+)
 
-__all__ = ["sigmoid", "sigmoid_derivative", "relu", "relu_derivative"]
+__all__ = [
+    "relu",
+    "relu_derivative",
+    "sigmoid",
+    "sigmoid_derivative",
+    "softmax",
+]
