@@ -22,10 +22,11 @@ implementation.
 - Numerically stable sigmoid activation.
 - Sigmoid derivative for backpropagation.
 - ReLU activation with an explicit derivative convention at zero.
+- Numerically stable Softmax activation for individual vectors and batches.
+- Mean Squared Error loss and derivative with input-shape validation.
 - Vectorized operations for scalar, list, and NumPy array inputs.
 - Automated tests for expected values, numerical stability, mathematical
-  properties, and probability normalization.
-- Numerically stable Softmax activation for individual vectors and batches.
+  properties, probability normalization, and input validation.
 
 ## Project Structure
 
@@ -34,9 +35,11 @@ NeuralNetworkLab/
 |-- src/
 |   `-- neural_network_lab/
 |       |-- __init__.py
-|       `-- activations.py
+|       |-- activations.py
+|       `-- losses.py
 |-- tests/
-|   `-- test_activations.py
+|   |-- test_activations.py
+|   `-- test_losses.py
 |-- pyproject.toml
 `-- README.md
 ```
@@ -77,6 +80,8 @@ python -m pytest
 import numpy as np
 
 from neural_network_lab import (
+    mean_squared_error,
+    mean_squared_error_derivative,
     relu,
     relu_derivative,
     sigmoid,
@@ -91,6 +96,12 @@ print(sigmoid_derivative(values))
 print(relu(values))
 print(relu_derivative(values))
 print(softmax(values))
+
+targets = np.array([1.0, 0.0, 1.0])
+predictions = np.array([0.7, 0.2, 0.9])
+
+print(mean_squared_error(targets, predictions))
+print(mean_squared_error_derivative(targets, predictions))
 ```
 
 ## Roadmap
@@ -99,6 +110,9 @@ print(softmax(values))
 - [x] ReLU activation and derivative
 - [x] Numerically stable Softmax activation with batch support
 - [ ] Loss functions
+  - [x] Mean Squared Error and derivative
+  - [ ] Binary Cross-Entropy and derivative
+  - [ ] Categorical Cross-Entropy and Softmax integration
 - [ ] Dense layers and parameter initialization
 - [ ] Vectorized backpropagation
 - [ ] Mini-batch training
