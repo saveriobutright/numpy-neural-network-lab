@@ -25,6 +25,8 @@ implementation.
 - Numerically stable Softmax activation for individual vectors and batches.
 - Mean Squared Error loss and derivative with input-shape validation.
 - Numerically stable Binary Cross-Entropy loss and derivative.
+- Categorical Cross-Entropy for one-hot targets and batches.
+- Simplified Softmax–CCE gradient with respect to logits.
 - Vectorized operations for scalar, list, and NumPy array inputs.
 - Automated tests for expected values, numerical stability, mathematical
   properties, probability normalization, and input validation.
@@ -83,6 +85,8 @@ import numpy as np
 from neural_network_lab import (
     binary_cross_entropy,
     binary_cross_entropy_derivative,
+    categorical_cross_entropy,
+    categorical_cross_entropy_derivative,
     mean_squared_error,
     mean_squared_error_derivative,
     relu,
@@ -90,6 +94,7 @@ from neural_network_lab import (
     sigmoid,
     sigmoid_derivative,
     softmax,
+    softmax_categorical_cross_entropy_derivative,
 )
 
 values = np.array([-2.0, 0.0, 2.0])
@@ -107,6 +112,24 @@ print(mean_squared_error(targets, predictions))
 print(mean_squared_error_derivative(targets, predictions))
 print(binary_cross_entropy(targets, predictions))
 print(binary_cross_entropy_derivative(targets, predictions))
+
+class_targets = np.array([
+    [0.0, 1.0, 0.0],
+    [1.0, 0.0, 0.0],
+])
+class_predictions = np.array([
+    [0.1, 0.7, 0.2],
+    [0.8, 0.1, 0.1],
+])
+
+print(categorical_cross_entropy(class_targets, class_predictions))
+print(categorical_cross_entropy_derivative(class_targets, class_predictions))
+print(
+    softmax_categorical_cross_entropy_derivative(
+        class_targets,
+        class_predictions,
+    )
+)
 ```
 
 ## Roadmap
@@ -114,10 +137,10 @@ print(binary_cross_entropy_derivative(targets, predictions))
 - [x] Stable sigmoid activation and derivative
 - [x] ReLU activation and derivative
 - [x] Numerically stable Softmax activation with batch support
-- [ ] Loss functions
+- [x] Loss functions
   - [x] Mean Squared Error and derivative
   - [x] Binary Cross-Entropy and derivative
-  - [ ] Categorical Cross-Entropy and Softmax integration
+  - [x] Categorical Cross-Entropy and Softmax integration
 - [ ] Dense layers and parameter initialization
 - [ ] Vectorized backpropagation
 - [ ] Mini-batch training
