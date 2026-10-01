@@ -24,6 +24,7 @@ implementation.
 - ReLU activation with an explicit derivative convention at zero.
 - Numerically stable Softmax activation for individual vectors and batches.
 - Mean Squared Error loss and derivative with input-shape validation.
+- Numerically stable Binary Cross-Entropy loss and derivative.
 - Vectorized operations for scalar, list, and NumPy array inputs.
 - Automated tests for expected values, numerical stability, mathematical
   properties, probability normalization, and input validation.
@@ -80,6 +81,8 @@ python -m pytest
 import numpy as np
 
 from neural_network_lab import (
+    binary_cross_entropy,
+    binary_cross_entropy_derivative,
     mean_squared_error,
     mean_squared_error_derivative,
     relu,
@@ -102,6 +105,8 @@ predictions = np.array([0.7, 0.2, 0.9])
 
 print(mean_squared_error(targets, predictions))
 print(mean_squared_error_derivative(targets, predictions))
+print(binary_cross_entropy(targets, predictions))
+print(binary_cross_entropy_derivative(targets, predictions))
 ```
 
 ## Roadmap
@@ -111,7 +116,7 @@ print(mean_squared_error_derivative(targets, predictions))
 - [x] Numerically stable Softmax activation with batch support
 - [ ] Loss functions
   - [x] Mean Squared Error and derivative
-  - [ ] Binary Cross-Entropy and derivative
+  - [x] Binary Cross-Entropy and derivative
   - [ ] Categorical Cross-Entropy and Softmax integration
 - [ ] Dense layers and parameter initialization
 - [ ] Vectorized backpropagation
