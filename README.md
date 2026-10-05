@@ -30,6 +30,8 @@ implementation.
 - Vectorized operations for scalar, list, and NumPy array inputs.
 - Automated tests for expected values, numerical stability, mathematical
   properties, probability normalization, and input validation.
+- Dense layers with Xavier uniform initialization.
+- Dense forward propagation for individual inputs and batches.
 
 ## Project Structure
 
@@ -39,9 +41,11 @@ NeuralNetworkLab/
 |   `-- neural_network_lab/
 |       |-- __init__.py
 |       |-- activations.py
+|       |-- layers.py
 |       `-- losses.py
 |-- tests/
 |   |-- test_activations.py
+|   |-- test_layers.py
 |   `-- test_losses.py
 |-- pyproject.toml
 `-- README.md
@@ -83,6 +87,7 @@ python -m pytest
 import numpy as np
 
 from neural_network_lab import (
+    Dense,
     binary_cross_entropy,
     binary_cross_entropy_derivative,
     categorical_cross_entropy,
@@ -130,6 +135,14 @@ print(
         class_predictions,
     )
 )
+
+dense = Dense(3, 2, seed=42)
+dense_inputs = np.array([
+    [1.0, 2.0, 3.0],
+    [0.5, -1.0, 2.0],
+])
+
+print(dense.forward(dense_inputs))
 ```
 
 ## Roadmap
@@ -141,7 +154,7 @@ print(
   - [x] Mean Squared Error and derivative
   - [x] Binary Cross-Entropy and derivative
   - [x] Categorical Cross-Entropy and Softmax integration
-- [ ] Dense layers and parameter initialization
+- [x] Dense layers and parameter initialization
 - [ ] Vectorized backpropagation
 - [ ] Mini-batch training
 - [ ] SGD, Momentum, and Adam optimizers

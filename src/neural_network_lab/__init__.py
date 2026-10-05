@@ -6,6 +6,8 @@ from .activations import (
     softmax,
 )
 
+from .layers import Dense
+
 from .losses import (
     binary_cross_entropy,
     binary_cross_entropy_derivative,
@@ -22,6 +24,7 @@ __all__ = [
     "sigmoid",
     "sigmoid_derivative",
     "softmax",
+    "Dense",
     "binary_cross_entropy",
     "binary_cross_entropy_derivative",
     "categorical_cross_entropy",
