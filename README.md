@@ -32,6 +32,7 @@ implementation.
   properties, probability normalization, and input validation.
 - Dense layers with Xavier uniform initialization.
 - Dense forward propagation for individual inputs and batches.
+- Vectorized Dense backward propagation for input, weight, and bias gradients.
 
 ## Project Structure
 
@@ -142,7 +143,14 @@ dense_inputs = np.array([
     [0.5, -1.0, 2.0],
 ])
 
-print(dense.forward(dense_inputs))
+dense_outputs = dense.forward(dense_inputs)
+dense_output_gradients = np.ones_like(dense_outputs)
+dense_input_gradients = dense.backward(dense_output_gradients)
+
+print(dense_outputs)
+print(dense_input_gradients)
+print(dense.weight_gradients)
+print(dense.bias_gradients)
 ```
 
 ## Roadmap
@@ -155,7 +163,7 @@ print(dense.forward(dense_inputs))
   - [x] Binary Cross-Entropy and derivative
   - [x] Categorical Cross-Entropy and Softmax integration
 - [x] Dense layers and parameter initialization
-- [ ] Vectorized backpropagation
+- [x] Vectorized backpropagation
 - [ ] Mini-batch training
 - [ ] SGD, Momentum, and Adam optimizers
 - [ ] Gradient checking

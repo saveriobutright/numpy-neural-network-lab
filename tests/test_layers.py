@@ -119,3 +119,113 @@ def test_dense_forward_rejects_invalid_inputs(invalid_inputs):
 
     with pytest.raises(ValueError):
         layer.forward(invalid_inputs)
+
+
+def test_dense_backward_returns_expected_gradients_for_single_input():
+    layer = Dense(2, 2, seed=42)
+    layer.weights = np.array([
+        [0.5, 1.0],
+        [-0.5, 0.25],
+    ])
+    layer.biases = np.array([0.1, -0.2])
+
+    inputs = np.array([2.0, -1.0])
+    output_gradients = np.array([0.3, -0.2])
+
+    expected_weight_gradients = np.array([
+        [0.6, -0.4],
+        [-0.3, 0.2],
+    ])
+    expected_bias_gradients = np.array([0.3, -0.2])
+    expected_input_gradients = np.array([-0.05, -0.2])
+
+    layer.forward(inputs)
+    input_gradients = layer.backward(output_gradients)
+
+    np.testing.assert_allclose(
+        layer.weight_gradients,
+        expected_weight_gradients,
+    )
+    np.testing.assert_allclose(
+        layer.bias_gradients,
+        expected_bias_gradients,
+    )
+    np.testing.assert_allclose(
+        input_gradients,
+        expected_input_gradients,
+    )
+
+
+def test_dense_backward_returns_expected_gradients_for_batch():
+    layer = Dense(2, 2, seed=42)
+    layer.weights = np.array([
+        [0.5, 1.0],
+        [-0.5, 0.25],
+    ])
+    layer.biases = np.array([0.1, -0.2])
+
+    inputs = np.array([
+        [2.0, -1.0],
+        [0.0, 2.0],
+    ])
+    output_gradients = np.array([
+        [0.3, -0.2],
+        [-0.1, 0.4],
+    ])
+
+    expected_weight_gradients = np.array([
+        [0.6, -0.4],
+        [-0.5, 1.0],
+    ])
+    expected_bias_gradients = np.array([0.2, 0.2])
+    expected_input_gradients = np.array([
+        [-0.05, -0.2],
+        [0.35, 0.15],
+    ])
+
+    layer.forward(inputs)
+    input_gradients = layer.backward(output_gradients)
+
+    np.testing.assert_allclose(
+        layer.weight_gradients,
+        expected_weight_gradients,
+    )
+    np.testing.assert_allclose(
+        layer.bias_gradients,
+        expected_bias_gradients,
+    )
+    np.testing.assert_allclose(
+        input_gradients,
+        expected_input_gradients,
+    )
+
+
+def test_dense_backward_requires_forward_pass():
+    layer = Dense(2, 2, seed=42)
+
+    with pytest.raises(RuntimeError):
+        layer.backward([0.3, -0.2])
+
+
+@pytest.mark.parametrize(
+    ("inputs", "output_gradients"),
+    [
+        # Single input: expected gradient shape is (2,)
+        ([1.0, 2.0], [0.1, 0.2, 0.3]),
+
+        # Batch input: a one-dimensional gradient is invalid
+        ([[1.0, 2.0], [3.0, 4.0]], [0.1, 0.2]),
+
+        # Batch size does not match
+        ([[1.0, 2.0], [3.0, 4.0]], [[0.1, 0.2]]),
+    ],
+)
+def test_dense_backward_rejects_invalid_gradient_shapes(
+    inputs,
+    output_gradients,
+):
+    layer = Dense(2, 2, seed=42)
+    layer.forward(inputs)
+
+    with pytest.raises(ValueError):
+        layer.backward(output_gradients)

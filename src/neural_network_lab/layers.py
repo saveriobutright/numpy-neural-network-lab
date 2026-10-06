@@ -24,6 +24,10 @@ class Dense:
         )
         self.biases = np.zeros((output_size,), dtype=float)
 
+        self.inputs = None
+        self.weight_gradients = np.zeros_like(self.weights)
+        self.bias_gradients = np.zeros_like(self.biases)
+
     def forward(self, inputs):
         """Perform the forward pass through the layer."""
         inputs = np.asarray(inputs, dtype=float)
@@ -37,4 +41,34 @@ class Dense:
         if inputs.shape[-1] != self.input_size:
             raise ValueError("Input size mismatch.")
 
+        self.inputs = inputs
         return inputs @ self.weights + self.biases
+
+    def backward(self, output_gradients):
+        """Perform the backward pass through the layer."""
+        if self.inputs is None:
+            raise RuntimeError("Forward pass must be called before backward.")
+
+        output_gradients = np.asarray(output_gradients, dtype=float)
+
+        if self.inputs.ndim == 1:
+            expected_shape = (self.output_size,)
+        else:
+            expected_shape = (self.inputs.shape[0], self.output_size)
+
+        if output_gradients.shape != expected_shape:
+            raise ValueError(
+                f"Output gradients must have shape {expected_shape}."
+            )
+
+        if self.inputs.ndim == 1:
+            self.weight_gradients = np.outer(
+                self.inputs,
+                output_gradients,
+            )
+            self.bias_gradients = output_gradients.copy()
+        else:
+            self.weight_gradients = self.inputs.T @ output_gradients
+            self.bias_gradients = np.sum(output_gradients, axis=0)
+
+        return output_gradients @ self.weights.T
