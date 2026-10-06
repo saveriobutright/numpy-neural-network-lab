@@ -243,6 +243,7 @@ def test_categorical_cross_entropy_derivative_is_finite_at_probability_boundarie
 
     assert np.all(np.isfinite(cce_derivative))
 
+
 @pytest.mark.parametrize(
     "loss_function",
     [
@@ -251,33 +252,35 @@ def test_categorical_cross_entropy_derivative_is_finite_at_probability_boundarie
         softmax_categorical_cross_entropy_derivative,
     ],
 )
-@pytest.mark.parametrize(("y_true", "y_pred"), [
-    # Mismatched shapes
-    ([0, 1, 0], [0.2, 0.8]),
+@pytest.mark.parametrize(
+    ("y_true", "y_pred"),
+    [
+        # Mismatched shapes
+        ([0, 1, 0], [0.2, 0.8]),
 
-    # Unsupported three-dimensional inputs
-    ([[[0, 1, 0]]], [[[0.1, 0.7, 0.2]]]),
+        # Unsupported three-dimensional inputs
+        ([[[0, 1, 0]]], [[[0.1, 0.7, 0.2]]]),
 
-    # Empty inputs
-    ([], []),
+        # Empty inputs
+        ([], []),
 
-    # Target is not one-hot
-    ([1, 1, 0], [0.1, 0.7, 0.2]),
+        # Target is not one-hot
+        ([1, 1, 0], [0.1, 0.7, 0.2]),
 
-    # Probabilities do not sum to one
-    ([0, 1, 0], [0.1, 0.7, 0.1]),
+        # Probabilities do not sum to one
+        ([0, 1, 0], [0.1, 0.7, 0.1]),
 
-    # Probability outside the valid range, while still summing to one
-    ([0, 1, 0], [-0.1, 0.7, 0.4]),
+        # Probability outside the valid range, while still summing to one
+        ([0, 1, 0], [-0.1, 0.7, 0.4]),
 
-    # Non-finite probability
-    ([0, 1, 0], [0.1, np.nan, 0.9]),
+        # Non-finite probability
+        ([0, 1, 0], [0.1, np.nan, 0.9]),
     ],
 )
 def test_categorical_cross_entropy_functions_reject_invalid_inputs(
     loss_function,
     y_true,
-    y_pred
-    ):
+    y_pred,
+):
     with pytest.raises(ValueError):
         loss_function(y_true, y_pred)
