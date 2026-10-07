@@ -25,8 +25,8 @@ class Dense:
         self.biases = np.zeros((output_size,), dtype=float)
 
         self.inputs = None
-        self.weight_gradients = np.zeros_like(self.weights)
-        self.bias_gradients = np.zeros_like(self.biases)
+        self.weight_gradients = None
+        self.bias_gradients = None
 
     def forward(self, inputs):
         """Perform the forward pass through the layer."""

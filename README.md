@@ -35,6 +35,7 @@ implementation.
 - Vectorized Dense backward propagation for input, weight, and bias gradients.
 - Reproducible mini-batch iteration with optional shuffling and support for
   partial final batches.
+- Stochastic Gradient Descent parameter updates with learning-rate validation.
 
 ## Project Structure
 
@@ -46,11 +47,13 @@ NeuralNetworkLab/
 |       |-- activations.py
 |       |-- layers.py
 |       |-- losses.py
+|       |-- optimizers.py
 |       `-- training.py
 |-- tests/
 |   |-- test_activations.py
 |   |-- test_layers.py
 |   |-- test_losses.py
+|   |-- test_optimizers.py
 |   `-- test_training.py
 |-- pyproject.toml
 `-- README.md
@@ -106,6 +109,7 @@ from neural_network_lab import (
     softmax,
     softmax_categorical_cross_entropy_derivative,
     iterate_minibatches,
+    SGD,
 )
 
 values = np.array([-2.0, 0.0, 2.0])
@@ -157,6 +161,12 @@ print(dense_input_gradients)
 print(dense.weight_gradients)
 print(dense.bias_gradients)
 
+optimizer = SGD(learning_rate=0.01)
+optimizer.step(dense)
+
+print(dense.weights)
+print(dense.biases)
+
 for batch_inputs, batch_targets in iterate_minibatches(
     dense_inputs,
     class_targets,
@@ -182,7 +192,10 @@ for batch_inputs, batch_targets in iterate_minibatches(
 - [ ] Mini-batch training
   - [x] Reproducible mini-batch iteration
   - [ ] Parameter update training loop
-- [ ] SGD, Momentum, and Adam optimizers
+- [ ] Optimizers
+  - [x] SGD
+  - [ ] Momentum
+  - [ ] Adam
 - [ ] Gradient checking
 - [ ] Experiments on synthetic datasets and Fashion MNIST
 - [ ] Comparison with PyTorch
