@@ -44,3 +44,46 @@ def iterate_minibatches(
         batch_indices = indices[start:end]
 
         yield inputs[batch_indices], targets[batch_indices]
+
+
+def train_epoch(
+    layer,
+    inputs,
+    targets,
+    loss_function,
+    loss_derivative,
+    optimizer,
+    batch_size,
+    shuffle=True,
+    seed=None,
+):
+    """Train a single layer for one epoch."""
+    total_loss = 0.0
+    sample_count = 0
+
+    for batch_inputs, batch_targets in iterate_minibatches(
+        inputs,
+        targets,
+        batch_size=batch_size,
+        shuffle=shuffle,
+        seed=seed,
+    ):
+        predictions = layer.forward(batch_inputs)
+
+        batch_loss = loss_function(
+            batch_targets,
+            predictions,
+        )
+        output_gradients = loss_derivative(
+            batch_targets,
+            predictions,
+        )
+
+        layer.backward(output_gradients)
+        optimizer.step(layer)
+
+        current_batch_size = batch_inputs.shape[0]
+        total_loss += batch_loss * current_batch_size
+        sample_count += current_batch_size
+
+    return float(total_loss / sample_count)

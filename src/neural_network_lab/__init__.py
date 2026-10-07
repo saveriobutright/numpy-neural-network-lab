@@ -20,7 +20,10 @@ from .losses import (
 
 from .optimizers import SGD
 
-from .training import iterate_minibatches
+from .training import (
+    iterate_minibatches,
+    train_epoch,
+)
 
 __all__ = [
     "relu",
@@ -38,4 +41,5 @@ __all__ = [
     "softmax_categorical_cross_entropy_derivative",
     "iterate_minibatches",
     "SGD",
+    "train_epoch",
 ]

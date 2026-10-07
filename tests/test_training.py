@@ -1,7 +1,16 @@
 import numpy as np
 import pytest
 
-from neural_network_lab.training import iterate_minibatches
+from neural_network_lab.layers import Dense
+from neural_network_lab.losses import (
+    mean_squared_error,
+    mean_squared_error_derivative,
+)
+from neural_network_lab.optimizers import SGD
+from neural_network_lab.training import (
+    iterate_minibatches,
+    train_epoch,
+)
 
 
 def test_iterate_minibatches_preserves_order_and_final_partial_batch():
@@ -165,3 +174,94 @@ def test_iterate_minibatches_rejects_non_boolean_shuffle(
                 shuffle=invalid_shuffle,
             )
         )
+
+
+def test_train_epoch_updates_parameters_and_returns_loss():
+    inputs = np.array([
+        [-1.0],
+        [0.0],
+        [1.0],
+    ])
+    targets = np.array([
+        [-1.0],
+        [1.0],
+        [3.0],
+    ])
+
+    layer = Dense(1, 1, seed=42)
+    layer.weights = np.zeros((1, 1))
+    layer.biases = np.zeros(1)
+
+    optimizer = SGD(learning_rate=0.1)
+
+    loss = train_epoch(
+        layer,
+        inputs,
+        targets,
+        mean_squared_error,
+        mean_squared_error_derivative,
+        optimizer,
+        batch_size=3,
+        shuffle=False,
+    )
+
+    np.testing.assert_allclose(loss, 11 / 3, rtol=1e-7)
+    np.testing.assert_allclose(
+        layer.weights,
+        [[4 / 15]],
+        rtol=1e-7,
+    )
+    np.testing.assert_allclose(
+        layer.biases,
+        [0.2],
+        rtol=1e-7,
+    )
+
+
+def test_train_epoch_learns_linear_relationship():
+    inputs = np.array([
+        [-2.0],
+        [-1.0],
+        [0.0],
+        [1.0],
+        [2.0],
+    ])
+    targets = 2 * inputs + 1
+
+    layer = Dense(1, 1, seed=42)
+    optimizer = SGD(learning_rate=0.05)
+
+    initial_loss = mean_squared_error(
+        targets,
+        layer.forward(inputs),
+    )
+
+    for epoch in range(100):
+        train_epoch(
+            layer,
+            inputs,
+            targets,
+            mean_squared_error,
+            mean_squared_error_derivative,
+            optimizer,
+            batch_size=2,
+            shuffle=True,
+            seed=epoch,
+        )
+
+    final_loss = mean_squared_error(
+        targets,
+        layer.forward(inputs),
+    )
+
+    assert final_loss < initial_loss
+    np.testing.assert_allclose(
+        layer.weights,
+        [[2.0]],
+        atol=1e-7,
+    )
+    np.testing.assert_allclose(
+        layer.biases,
+        [1.0],
+        atol=1e-7,
+    )

@@ -36,6 +36,7 @@ implementation.
 - Reproducible mini-batch iteration with optional shuffling and support for
   partial final batches.
 - Stochastic Gradient Descent parameter updates with learning-rate validation.
+- Single-layer mini-batch training epochs with pluggable losses and optimizers.
 
 ## Project Structure
 
@@ -110,6 +111,7 @@ from neural_network_lab import (
     softmax_categorical_cross_entropy_derivative,
     iterate_minibatches,
     SGD,
+    train_epoch,
 )
 
 values = np.array([-2.0, 0.0, 2.0])
@@ -152,6 +154,11 @@ dense_inputs = np.array([
     [0.5, -1.0, 2.0],
 ])
 
+dense_targets = np.array([
+    [1.0, 0.0],
+    [0.0, 1.0],
+])
+
 dense_outputs = dense.forward(dense_inputs)
 dense_output_gradients = np.ones_like(dense_outputs)
 dense_input_gradients = dense.backward(dense_output_gradients)
@@ -166,6 +173,19 @@ optimizer.step(dense)
 
 print(dense.weights)
 print(dense.biases)
+
+epoch_loss = train_epoch(
+    dense,
+    dense_inputs,
+    dense_targets,
+    mean_squared_error,
+    mean_squared_error_derivative,
+    optimizer,
+    batch_size=1,
+    shuffle=False,
+)
+
+print(epoch_loss)
 
 for batch_inputs, batch_targets in iterate_minibatches(
     dense_inputs,
@@ -189,9 +209,9 @@ for batch_inputs, batch_targets in iterate_minibatches(
   - [x] Categorical Cross-Entropy and Softmax integration
 - [x] Dense layers and parameter initialization
 - [x] Vectorized backpropagation
-- [ ] Mini-batch training
+- [x] Single-layer mini-batch training
   - [x] Reproducible mini-batch iteration
-  - [ ] Parameter update training loop
+  - [x] Parameter update training loop
 - [ ] Optimizers
   - [x] SGD
   - [ ] Momentum
