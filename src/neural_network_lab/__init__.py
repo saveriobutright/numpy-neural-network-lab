@@ -18,6 +18,8 @@ from .losses import (
     softmax_categorical_cross_entropy_derivative,
 )
 
+from .training import iterate_minibatches
+
 __all__ = [
     "relu",
     "relu_derivative",
@@ -32,4 +34,5 @@ __all__ = [
     "mean_squared_error",
     "mean_squared_error_derivative",
     "softmax_categorical_cross_entropy_derivative",
+    "iterate_minibatches",
 ]

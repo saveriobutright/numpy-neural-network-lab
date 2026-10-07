@@ -33,6 +33,8 @@ implementation.
 - Dense layers with Xavier uniform initialization.
 - Dense forward propagation for individual inputs and batches.
 - Vectorized Dense backward propagation for input, weight, and bias gradients.
+- Reproducible mini-batch iteration with optional shuffling and support for
+  partial final batches.
 
 ## Project Structure
 
@@ -43,11 +45,13 @@ NeuralNetworkLab/
 |       |-- __init__.py
 |       |-- activations.py
 |       |-- layers.py
-|       `-- losses.py
+|       |-- losses.py
+|       `-- training.py
 |-- tests/
 |   |-- test_activations.py
 |   |-- test_layers.py
-|   `-- test_losses.py
+|   |-- test_losses.py
+|   `-- test_training.py
 |-- pyproject.toml
 `-- README.md
 ```
@@ -101,6 +105,7 @@ from neural_network_lab import (
     sigmoid_derivative,
     softmax,
     softmax_categorical_cross_entropy_derivative,
+    iterate_minibatches,
 )
 
 values = np.array([-2.0, 0.0, 2.0])
@@ -151,6 +156,16 @@ print(dense_outputs)
 print(dense_input_gradients)
 print(dense.weight_gradients)
 print(dense.bias_gradients)
+
+for batch_inputs, batch_targets in iterate_minibatches(
+    dense_inputs,
+    class_targets,
+    batch_size=1,
+    shuffle=True,
+    seed=42,
+):
+    print(batch_inputs)
+    print(batch_targets)
 ```
 
 ## Roadmap
@@ -165,6 +180,8 @@ print(dense.bias_gradients)
 - [x] Dense layers and parameter initialization
 - [x] Vectorized backpropagation
 - [ ] Mini-batch training
+  - [x] Reproducible mini-batch iteration
+  - [ ] Parameter update training loop
 - [ ] SGD, Momentum, and Adam optimizers
 - [ ] Gradient checking
 - [ ] Experiments on synthetic datasets and Fashion MNIST
