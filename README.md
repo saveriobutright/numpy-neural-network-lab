@@ -40,6 +40,8 @@ implementation.
 - Adam optimization with bias-corrected moments and independent state
   for each layer.
 - Single-layer mini-batch training epochs with pluggable losses and optimizers.
+- Numerical gradient checks for Dense weights and biases using MSE,
+  covering individual inputs and batches.
 
 ## Project Structure
 
@@ -55,6 +57,7 @@ NeuralNetworkLab/
 |       `-- training.py
 |-- tests/
 |   |-- test_activations.py
+|   |-- test_gradient_checking.py
 |   |-- test_layers.py
 |   |-- test_losses.py
 |   |-- test_optimizers.py
@@ -224,7 +227,7 @@ for batch_inputs, batch_targets in iterate_minibatches(
   - [x] SGD
   - [x] Momentum
   - [x] Adam
-- [ ] Gradient checking
+- [x] Numerical gradient checking for Dense layers
 - [ ] Experiments on synthetic datasets and Fashion MNIST
 - [ ] Comparison with PyTorch
 - [ ] Interactive training visualizations
