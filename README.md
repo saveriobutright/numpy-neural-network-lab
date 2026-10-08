@@ -36,6 +36,7 @@ implementation.
 - Reproducible mini-batch iteration with optional shuffling and support for
   partial final batches.
 - Stochastic Gradient Descent parameter updates with learning-rate validation.
+- Momentum optimization with persistent, independent velocities for each layer.
 - Single-layer mini-batch training epochs with pluggable losses and optimizers.
 
 ## Project Structure
@@ -110,6 +111,7 @@ from neural_network_lab import (
     softmax,
     softmax_categorical_cross_entropy_derivative,
     iterate_minibatches,
+    Momentum,
     SGD,
     train_epoch,
 )
@@ -169,6 +171,9 @@ print(dense.weight_gradients)
 print(dense.bias_gradients)
 
 optimizer = SGD(learning_rate=0.01)
+optimizer = SGD(learning_rate=0.01)
+# Alternatively:
+# optimizer = Momentum(learning_rate=0.01, momentum=0.9)
 optimizer.step(dense)
 
 print(dense.weights)
@@ -214,7 +219,7 @@ for batch_inputs, batch_targets in iterate_minibatches(
   - [x] Parameter update training loop
 - [ ] Optimizers
   - [x] SGD
-  - [ ] Momentum
+  - [x] Momentum
   - [ ] Adam
 - [ ] Gradient checking
 - [ ] Experiments on synthetic datasets and Fashion MNIST
