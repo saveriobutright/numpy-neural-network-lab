@@ -18,7 +18,7 @@ from .losses import (
     softmax_categorical_cross_entropy_derivative,
 )
 
-from .optimizers import Momentum, SGD
+from .optimizers import Adam, Momentum, SGD
 
 from .training import (
     iterate_minibatches,
@@ -40,6 +40,7 @@ __all__ = [
     "mean_squared_error_derivative",
     "softmax_categorical_cross_entropy_derivative",
     "iterate_minibatches",
+    "Adam",
     "Momentum",
     "SGD",
     "train_epoch",
